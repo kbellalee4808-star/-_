@@ -1,149 +1,390 @@
-<!-- 💎 리워드 사용 방식 — 복사해서 사용 가능 -->
+<!DOCTYPE html>
+<html lang="ko" style="scroll-behavior:smooth;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<title>구독료 결제 안내</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  .reward-wrap {
-    font-family: 'Noto Sans KR', sans-serif;
-    color: #fff;
-    background: #06121c;
-    padding: 24px 20px;
-    max-width: 520px;
-    margin: 0 auto;
-  }
-  .reward-wrap strong { color: #fff; }
-  .r-title {
-    font-size: 18px;
-    font-weight: 900;
-    color: #e8d48b;
-    margin: 28px 0 16px;
-    padding-left: 2px;
-  }
-  .r-title:first-of-type { margin-top: 0; }
-  .r-title em {
-    font-style: normal;
-    color: rgba(255,255,255,0.35);
-    font-weight: 400;
-  }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #0a0e1a;
+  --border-subtle: rgba(255,255,255,0.08);
+  --text-primary: #e8eaf0;
+  --text-secondary: rgba(255,255,255,0.55);
+  --text-muted: rgba(255,255,255,0.35);
+  --accent-green: #4ade80;
+  --accent-yellow: #fbbf24;
+  --accent-red: #f87171;
+  --accent-blue: #60a5fa;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  min-height: 100dvh;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.bg-glow {
+  position: fixed; top: -40%; left: -20%;
+  width: 140%; height: 80%;
+  background: radial-gradient(ellipse, rgba(34,211,238,0.06) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+.container {
+  position: relative; z-index: 1;
+  max-width: 480px; margin: 0 auto;
+  padding: 0 20px 60px;
+  padding-bottom: max(60px, env(safe-area-inset-bottom, 60px));
+}
+
+/* Header */
+.header { text-align: center; padding: 48px 0 32px; }
+.header-icon {
+  width: 64px; height: 64px; margin: 0 auto 20px;
+  background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(248,113,113,0.15));
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(251,191,36,0.1); }
+  50% { box-shadow: 0 0 30px rgba(251,191,36,0.25); }
+}
+.header h1 {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px;
+  background: linear-gradient(135deg, #fff, rgba(255,255,255,0.8));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.header p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+/* Notice Banner */
+.notice-banner {
+  background: linear-gradient(135deg, rgba(248,113,113,0.08), rgba(251,191,36,0.06));
+  border: 1px solid rgba(251,191,36,0.15); border-radius: 14px;
+  padding: 16px 18px; margin-bottom: 28px;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.notice-banner .icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.notice-banner .text { font-size: 13.5px; color: rgba(255,255,255,0.75); line-height: 1.65; }
+.notice-banner .text strong { color: var(--accent-yellow); font-weight: 700; }
+
+/* Section Title */
+.section-title {
+  font-size: 15px; font-weight: 700; color: var(--text-secondary);
+  margin-bottom: 16px; display: flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.section-title::after { content: ''; flex: 1; height: 1px; background: var(--border-subtle); }
+
+/* Step Cards */
+.step-card {
+  border-radius: 16px; padding: 18px 16px; margin-bottom: 12px;
+  border: 1px solid; position: relative; overflow: hidden;
+}
+.step-card::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 4px; height: 100%; border-radius: 4px 0 0 4px;
+}
+.step-card.green { background: linear-gradient(135deg, rgba(74,222,128,0.12), rgba(74,222,128,0.03)); border-color: rgba(74,222,128,0.15); }
+.step-card.green::before { background: var(--accent-green); }
+.step-card.yellow { background: linear-gradient(135deg, rgba(251,191,36,0.12), rgba(251,191,36,0.03)); border-color: rgba(251,191,36,0.15); }
+.step-card.yellow::before { background: var(--accent-yellow); }
+.step-card.red { background: linear-gradient(135deg, rgba(248,113,113,0.15), rgba(248,113,113,0.03)); border-color: rgba(248,113,113,0.18); }
+.step-card.red::before { background: var(--accent-red); }
+.step-label { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.step-card.green .step-label { color: var(--accent-green); }
+.step-card.yellow .step-label { color: var(--accent-yellow); }
+.step-card.red .step-label { color: var(--accent-red); }
+.step-desc { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.7; }
+.step-desc strong { color: var(--text-primary); font-weight: 600; }
+.step-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; margin-bottom: 8px; }
+.step-card.green .step-tag { background: rgba(74,222,128,0.12); color: var(--accent-green); }
+.step-card.yellow .step-tag { background: rgba(251,191,36,0.12); color: var(--accent-yellow); }
+.step-card.red .step-tag { background: rgba(248,113,113,0.12); color: var(--accent-red); }
+
+/* How-to */
+.howto-card {
+  background: linear-gradient(135deg, rgba(96,165,250,0.10), rgba(96,165,250,0.03));
+  border: 1px solid rgba(96,165,250,0.12); border-radius: 16px;
+  padding: 20px 16px; margin-top: 24px; margin-bottom: 14px;
+}
+.howto-title { font-size: 15px; font-weight: 700; color: var(--accent-blue); margin-bottom: 14px; }
+.howto-steps { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; justify-content: center; }
+.howto-step {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 8px 10px; font-size: 12px; font-weight: 500;
+  color: var(--text-primary); white-space: nowrap;
+}
+.howto-arrow { color: var(--text-muted); font-size: 12px; }
+
+/* CTA */
+.cta-wrap { margin-top: 28px; }
+.cta-btn {
+  display: block; width: 100%; padding: 16px; min-height: 52px;
+  background: linear-gradient(135deg, #22d3ee, #3b82f6);
+  color: #fff; text-align: center; text-decoration: none;
+  font-size: 16px; font-weight: 700; border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(34,211,238,0.25);
+  transition: transform 0.15s, opacity 0.15s;
+}
+.cta-btn:active { transform: scale(0.97); opacity: 0.9; }
+.cta-btn-secondary {
+  display: block; width: 100%; padding: 15px; min-height: 50px;
+  background: rgba(255,255,255,0.04); border: 1.5px solid rgba(232,212,139,0.3);
+  color: #e8d48b; text-align: center; text-decoration: none;
+  font-family: 'Noto Sans KR', -apple-system, sans-serif;
+  font-size: 15px; font-weight: 700; border-radius: 14px; margin-top: 10px;
+  cursor: pointer; touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s, background 0.15s;
+}
+.cta-btn-secondary:active { transform: scale(0.97); background: rgba(232,212,139,0.08); }
+.cta-sub { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 10px; }
+
+/* Back Button */
+.back-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  margin-top: 24px; padding: 15px; min-height: 50px; width: 100%;
+  background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: 14px; text-decoration: none;
+  color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 700;
+  font-family: 'Noto Sans KR', -apple-system, sans-serif;
+  cursor: pointer; touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s, background 0.15s;
+}
+.back-btn:active { transform: scale(0.97); background: rgba(255,255,255,0.08); }
+
+/* Reward Section */
+#reward-section { display: none; margin-top: 48px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.08); }
+.r-title-row { font-size: 17px; font-weight: 900; color: #e8d48b; margin-bottom: 16px; }
+.r-title-row span { color: rgba(255,255,255,0.35); }
+.divider { height: 1px; background: rgba(255,255,255,0.08); margin: 24px 0; }
+
+/* Accordion */
+.accord-wrap { border-radius: 14px; overflow: hidden; }
+.accord-btn {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; width: 100%; min-height: 50px; border: none; cursor: pointer;
+  font-family: 'Noto Sans KR', -apple-system, sans-serif;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+.accord-btn:active { opacity: 0.8; }
+.accord-arrow { color: rgba(255,255,255,0.3); font-size: 12px; transition: transform 0.3s; }
+
+/* Footer */
+.footer { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-subtle); text-align: center; }
+.footer p { font-size: 12px; color: var(--text-muted); line-height: 1.8; }
+
+/* Animations */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.animate { animation: fadeUp 0.5s ease-out both; }
+.delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; } .delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; } .delay-6 { animation-delay: 0.6s; }
+
+/* 반응형: 320px~ */
+@media (max-width: 360px) {
+  .container { padding: 0 16px 48px; }
+  .header { padding: 36px 0 24px; }
+  .header h1 { font-size: 20px; }
+  .header p { font-size: 13px; }
+  .step-card { padding: 16px 14px; }
+  .step-label { font-size: 14px; }
+  .step-desc { font-size: 12px; }
+  .howto-step { padding: 7px 8px; font-size: 11px; }
+  .cta-btn { font-size: 15px; padding: 14px; }
+  .cta-btn-secondary { font-size: 14px; padding: 13px; }
+  .r-title-row { font-size: 15px; }
+}
+/* 반응형: 481px+ */
+@media (min-width: 481px) {
+  .container { max-width: 520px; padding: 0 28px 80px; }
+  .header { padding: 56px 0 36px; }
+  .header h1 { font-size: 24px; }
+  .step-card { padding: 22px 20px; }
+}
 </style>
+</head>
+<body>
 
-<div class="reward-wrap">
+<div class="bg-glow"></div>
+<div class="container">
 
-  <!-- ===== 리워드 사용방식 ===== -->
-  <div class="r-title"><em>&lt;</em> 리워드 사용방식 <em>&gt;</em></div>
+  <!-- Header -->
+  <div class="header animate">
+    <div class="header-icon">⚠️</div>
+    <h1>구독료 결제 안내</h1>
+    <p>미납이 확인되었습니다.<br>아래 안내에 따라 빠르게 처리해 주세요.</p>
+  </div>
 
-  <div style="display:flex;flex-direction:column;gap:12px;">
-    <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:2px;">3단계로 이해해보세요</div>
-    <div style="display:flex;gap:12px;align-items:flex-start;">
-      <div style="width:28px;height:28px;border-radius:50%;background:#2563eb;color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
-      <div>
-        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;">멤버십 시작</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.7;">매달 여행 예산을 준비합니다<br>💙 월 <strong>$100</strong> → 200 RP 적립<br>❤️ 월 <strong>$250</strong> → 500 RP 적립</div>
-      </div>
-    </div>
-    <div style="display:flex;gap:12px;align-items:flex-start;">
-      <div style="width:28px;height:28px;border-radius:50%;background:#2563eb;color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
-      <div>
-        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;">리워드 적립</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.7;">정시 지불 시 예약에 사용할 리워드가 쌓입니다<br><strong style="color:#4ecdc4;">(청구서 발행 5일 이내 더블 적립)</strong></div>
-      </div>
-    </div>
-    <div style="display:flex;gap:12px;align-items:flex-start;">
-      <div style="width:28px;height:28px;border-radius:50%;background:#16a34a;color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
-      <div>
-        <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;">크루즈 예약 🎉</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.7;">쌓인 리워드로 크루즈 예약에 활용<br>일정 · 객실 · 항로 직접 선택</div>
-      </div>
+  <!-- Notice -->
+  <div class="notice-banner animate delay-1">
+    <span class="icon">💡</span>
+    <div class="text">결제일로부터 <strong>5일 이내</strong>에 처리하시면<br>모든 리워드 혜택이 그대로 유지됩니다.</div>
+  </div>
+
+  <!-- Steps -->
+  <div class="section-title animate delay-2">⏱️ 미납 시 단계별 안내</div>
+
+  <div class="step-card green animate delay-2">
+    <span class="step-tag">BEST</span>
+    <div class="step-label">✅ 5일 이내 결제 시</div>
+    <div class="step-desc"><strong>2배 리워드 적립 완벽 유지</strong><br>앱에서 수동 결제 진행</div>
+  </div>
+  <div class="step-card yellow animate delay-3">
+    <span class="step-tag">주의</span>
+    <div class="step-label">⚡ 6일~30일 이내 결제 시</div>
+    <div class="step-desc">기본 적립금만 유지 <strong>(2배 적립 불가)</strong><br>수동 결제 필수</div>
+  </div>
+  <div class="step-card red animate delay-4">
+    <span class="step-tag">경고</span>
+    <div class="step-label">🚫 30일 초과 시</div>
+    <div class="step-desc">계정 <strong>비활성화</strong> 전환 (17% 할인만 유지)<br>2배 적립 리워드 <strong>복구 불가</strong></div>
+  </div>
+
+  <!-- How to pay -->
+  <div class="howto-card animate delay-5">
+    <div class="howto-title">📱 수동 결제 방법</div>
+    <div class="howto-steps">
+      <span class="howto-step">앱 로그인</span><span class="howto-arrow">→</span>
+      <span class="howto-step">미납 청구서</span><span class="howto-arrow">→</span>
+      <span class="howto-step">기한 확인</span><span class="howto-arrow">→</span>
+      <span class="howto-step">수동 결제</span>
     </div>
   </div>
 
-  <div style="height:1px;background:rgba(255,255,255,0.08);margin:24px 0;"></div>
-
-  <!-- ===== 올 리워드 결제 ===== -->
-  <div class="r-title"><em>&lt;</em> 올 리워드 결제 <em>&gt;</em></div>
-
-  <div style="background:rgba(42,157,143,0.06);border:2px solid rgba(42,157,143,0.2);border-radius:14px;padding:16px;">
-    <div style="display:flex;flex-direction:column;gap:6px;">
-      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 12px;font-size:12px;color:rgba(255,255,255,0.7);line-height:1.7;">
-        <strong>①</strong> 객실가의 50% → 리워드 달러로 차감 <span style="background:rgba(201,168,76,0.15);padding:1px 8px;border-radius:8px;font-size:10px;color:#e8d48b;">1 RP = $1</span>
-      </div>
-      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 12px;font-size:12px;color:rgba(255,255,255,0.7);line-height:1.7;">
-        <strong>②</strong> 나머지 금액 → 포인트 결제 <span style="background:rgba(37,150,255,0.15);padding:1px 8px;border-radius:8px;font-size:10px;color:#60a5fa;">2 RP = $1</span>
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:10px;font-size:12px;color:#6ddb8a;font-weight:600;">💳 현금 없이 리워드만으로 완전 결제 가능</div>
-    <div style="background:rgba(201,168,76,0.08);border-left:3px solid rgba(201,168,76,0.4);border-radius:0 8px 8px 0;padding:10px 12px;margin-top:10px;font-size:11.5px;color:rgba(255,255,255,0.55);line-height:1.7;">
-      💡 리워드 달러 차감 후 나머지 금액도 <strong style="color:#4ecdc4;">포인트로 결제 가능</strong>합니다. (적용 비율: 2 RP = $1)<br>
-      예) $900 결제 시 → 1,800 RP로 결제 가능<br>
-      <span style="color:#ff9090;">리워드가 부족하면 결제 안 됩니다.</span>
-    </div>
+  <!-- CTA -->
+  <div class="cta-wrap animate delay-6">
+    <a href="https://incruises.com" class="cta-btn" target="_blank" rel="noopener">🔗 앱에서 바로 결제하기</a>
+    <button type="button" class="cta-btn-secondary" id="reward-toggle" onclick="openReward();">💎 리워드 사용법 보기 ↓</button>
+    <p class="cta-sub">결제 버튼을 누르면 앱으로 이동합니다</p>
   </div>
 
-  <div style="height:1px;background:rgba(255,255,255,0.08);margin:24px 0;"></div>
+  <!-- ===== 리워드 사용법 (숨김) ===== -->
+  <div id="reward-section">
+    <div class="section-title">💎 리워드 사용법</div>
 
-  <!-- ===== 리워드 + 카드 혼합 결제 ===== -->
-  <div class="r-title"><em>&lt;</em> 리워드 + 카드 혼합 결제 <em>&gt;</em></div>
-
-  <div style="background:rgba(42,157,143,0.03);border:2px solid rgba(42,157,143,0.15);border-radius:14px;padding:16px;">
-    <div style="display:flex;flex-direction:column;gap:6px;">
-      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 12px;font-size:12px;color:rgba(255,255,255,0.7);line-height:1.7;">
-        <strong>①</strong> 객실가의 50% (내 자리) → 리워드로 결제 = <strong style="color:#6ddb8a;">사실상 무료</strong>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);">3단계로 이해해보세요</div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:#2563eb;color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+        <div style="min-width:0;"><div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;">멤버십 시작</div><div style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.7;">매달 여행 예산을 준비합니다<br>💙 월 <strong style="color:#fff;">$100</strong> → 200 RP 적립<br>❤️ 월 <strong style="color:#fff;">$250</strong> → 500 RP 적립</div></div>
       </div>
-      <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 12px;font-size:12px;color:rgba(255,255,255,0.7);line-height:1.7;">
-        <strong>②</strong> 동반자 <strong>카드로 결제</strong>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:#2563eb;color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+        <div style="min-width:0;"><div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;">리워드 적립</div><div style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.7;">정시 지불 시 예약에 사용할 리워드가 쌓입니다<br><strong style="color:#4ecdc4;">(청구서 발행 5일 이내 더블 적립)</strong></div></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:#16a34a;color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+        <div style="min-width:0;"><div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px;">크루즈 예약 🎉</div><div style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.7;">쌓인 리워드로 크루즈 예약에 활용<br>일정 · 객실 · 항로 직접 선택</div></div>
       </div>
     </div>
-    <div style="background:rgba(255,200,100,0.06);border-radius:10px;padding:10px 14px;margin-top:10px;text-align:center;">
-      <div style="font-size:13px;font-weight:700;color:#ff6b6b;">📌 즉, 본인 여행비는 0원</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;">동반자 비용만 카드로 추가 결제하면 됩니다</div>
+
+    <div class="divider"></div>
+    <div class="r-title-row"><span>&lt;</span> 올 리워드 결제 <span>&gt;</span></div>
+    <div style="background:rgba(42,157,143,0.06);border:2px solid rgba(42,157,143,0.2);border-radius:14px;padding:14px;">
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 12px;font-size:12px;color:rgba(255,255,255,0.7);line-height:1.7;"><strong style="color:#fff;">①</strong> 객실가의 50% → 리워드 달러로 차감 <span style="background:rgba(201,168,76,0.15);padding:1px 8px;border-radius:8px;font-size:10px;color:#e8d48b;">1 RP = $1</span></div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 12px;font-size:12px;color:rgba(255,255,255,0.7);line-height:1.7;"><strong style="color:#fff;">②</strong> 나머지 금액 → 포인트 결제 <span style="background:rgba(37,150,255,0.15);padding:1px 8px;border-radius:8px;font-size:10px;color:#60a5fa;">2 RP = $1</span></div>
+      </div>
+      <div style="text-align:center;margin-top:10px;font-size:12px;color:#6ddb8a;font-weight:600;">💳 현금 없이 리워드만으로 완전 결제 가능</div>
+      <div style="background:rgba(201,168,76,0.08);border-left:3px solid rgba(201,168,76,0.4);border-radius:0 8px 8px 0;padding:10px 12px;margin-top:10px;font-size:11.5px;color:rgba(255,255,255,0.55);line-height:1.7;">💡 리워드 달러 차감 후 나머지 금액도 <strong style="color:#4ecdc4;">포인트로 결제 가능</strong>합니다. (적용 비율: 2 RP = $1)<br>예) $900 결제 시 → 1,800 RP로 결제 가능<br><span style="color:#ff9090;">리워드가 부족하면 결제 안 됩니다.</span></div>
     </div>
-  </div>
 
-  <div style="height:1px;background:rgba(255,255,255,0.08);margin:24px 0;"></div>
+    <div class="divider"></div>
+    <div class="r-title-row"><span>&lt;</span> 리워드 + 카드 혼합 결제 <span>&gt;</span></div>
+    <div style="background:rgba(42,157,143,0.03);border:2px solid rgba(42,157,143,0.15);border-radius:14px;padding:14px;">
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 12px;font-size:12px;color:rgba(255,255,255,0.7);line-height:1.7;"><strong style="color:#fff;">①</strong> 객실가의 50% (내 자리) → 리워드로 결제 = <strong style="color:#6ddb8a;">사실상 무료</strong></div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 12px;font-size:12px;color:rgba(255,255,255,0.7);line-height:1.7;"><strong style="color:#fff;">②</strong> 동반자 <strong style="color:#fff;">카드로 결제</strong></div>
+      </div>
+      <div style="background:rgba(255,200,100,0.06);border-radius:10px;padding:10px 14px;margin-top:10px;text-align:center;">
+        <div style="font-size:13px;font-weight:700;color:#ff6b6b;">📌 즉, 본인 여행비는 0원</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;">동반자 비용만 카드로 추가 결제하면 됩니다</div>
+      </div>
+    </div>
 
-  <!-- ===== 하단 버튼 2개 ===== -->
-  <div style="display:flex;flex-direction:column;gap:10px;">
+    <div class="divider"></div>
 
-    <!-- 크루즈 예약 타이밍 버튼 -->
-    <div style="border:1px solid rgba(37,150,255,0.25);border-radius:14px;overflow:hidden;">
-      <button type="button" onclick="var el=document.getElementById('reward-timing');var a=this.querySelector('.ta');if(el.style.display==='none'){el.style.display='block';a.style.transform='rotate(180deg)';}else{el.style.display='none';a.style.transform='rotate(0deg)';}" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;width:100%;background:rgba(37,150,255,0.06);border:none;cursor:pointer;font-family:inherit;touch-action:manipulation;">
-        <span style="font-size:14px;font-weight:700;color:#60a5fa;">📅 크루즈 예약 타이밍</span>
-        <span class="ta" style="color:rgba(255,255,255,0.3);font-size:12px;transition:transform 0.3s;">▾</span>
-      </button>
-      <div id="reward-timing" style="display:none;padding:16px;">
-        <div style="font-size:12px;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:14px;">
-          크루즈는 원래 <strong>1년 반 ~ 2년 전부터</strong> 예약이 가능해요.<br>
-          일찍 예약할수록 ✓ <strong>가격이 더 저렴</strong>하고 ✓ <strong>객실 선택폭</strong>이 넓어요.<br><br>
-          👉 <strong style="color:#60a5fa;">270일(약 9개월) 이후</strong> 출발 상품부터 <strong style="color:#6ddb8a;">올리워드 적용 가능</strong>
+    <!-- 아코디언 -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="accord-wrap" style="border:1px solid rgba(37,150,255,0.25);">
+        <button type="button" class="accord-btn" style="background:rgba(37,150,255,0.06);" onclick="toggleAccord('reward-timing',this)">
+          <span style="font-size:14px;font-weight:700;color:#60a5fa;">📅 크루즈 예약 타이밍</span>
+          <span class="accord-arrow">▾</span>
+        </button>
+        <div id="reward-timing" style="display:none;padding:16px;">
+          <div style="font-size:12px;color:rgba(255,255,255,0.65);line-height:1.8;">크루즈는 원래 <strong style="color:#fff;">1년 반 ~ 2년 전부터</strong> 예약이 가능해요.<br>일찍 예약할수록 ✓ <strong style="color:#fff;">가격이 더 저렴</strong>하고 ✓ <strong style="color:#fff;">객실 선택폭</strong>이 넓어요.<br><br>👉 <strong style="color:#60a5fa;">270일(약 9개월) 이후</strong> 출발 상품부터 <strong style="color:#6ddb8a;">올리워드 적용 가능</strong></div>
+        </div>
+      </div>
+      <div class="accord-wrap" style="border:1px solid rgba(201,168,76,0.25);">
+        <button type="button" class="accord-btn" style="background:rgba(201,168,76,0.06);" onclick="toggleAccord('reward-prepay',this)">
+          <span style="font-size:14px;font-weight:700;color:#e8d48b;">⚠️ 선결제 안내</span>
+          <span class="accord-arrow">▾</span>
+        </button>
+        <div id="reward-prepay" style="display:none;padding:16px;">
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(42,157,143,0.06);border:1px solid rgba(42,157,143,0.15);border-radius:10px;padding:12px 14px;"><span style="font-size:12px;color:rgba(255,255,255,0.5);">90일 이후 상품</span><span style="font-size:12px;font-weight:700;color:#6ddb8a;">리워드 최대 50%</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px 14px;"><span style="font-size:12px;color:rgba(255,255,255,0.5);">60-89일 상품</span><span style="font-size:12px;font-weight:700;color:#fff;">1개월 선결제</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,200,100,0.04);border:1px solid rgba(201,168,76,0.15);border-radius:10px;padding:12px 14px;"><span style="font-size:12px;color:rgba(255,255,255,0.5);">30-59일 상품</span><span style="font-size:12px;font-weight:700;color:#fff;">2개월 선결제</span></div>
+          </div>
+          <div style="margin-top:12px;font-size:11.5px;color:rgba(255,255,255,0.5);line-height:1.8;">📌 선결제만 먼저 이루어지며, <strong style="color:#fff;">리워드 적립은 기존 날짜에 적립</strong>됩니다.<br>💎 더 많은 리워드 적립을 원하시면 <strong style="color:#f472b6;">프리미엄 플랜</strong>을 이용해 주세요.</div>
         </div>
       </div>
     </div>
 
-    <!-- 선결제 안내 버튼 -->
-    <div style="border:1px solid rgba(201,168,76,0.25);border-radius:14px;overflow:hidden;">
-      <button type="button" onclick="var el=document.getElementById('reward-prepay');var a=this.querySelector('.ta');if(el.style.display==='none'){el.style.display='block';a.style.transform='rotate(180deg)';}else{el.style.display='none';a.style.transform='rotate(0deg)';}" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;width:100%;background:rgba(201,168,76,0.06);border:none;cursor:pointer;font-family:inherit;touch-action:manipulation;">
-        <span style="font-size:14px;font-weight:700;color:#e8d48b;">⚠️ 선결제 안내</span>
-        <span class="ta" style="color:rgba(255,255,255,0.3);font-size:12px;transition:transform 0.3s;">▾</span>
-      </button>
-      <div id="reward-prepay" style="display:none;padding:16px;">
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(42,157,143,0.06);border:1px solid rgba(42,157,143,0.15);border-radius:10px;padding:12px 14px;">
-            <span style="font-size:12px;color:rgba(255,255,255,0.5);">90일 이후 상품</span>
-            <span style="font-size:13px;font-weight:700;color:#6ddb8a;">리워드 최대 50% 사용</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px 14px;">
-            <span style="font-size:12px;color:rgba(255,255,255,0.5);">60-89일 상품</span>
-            <span style="font-size:13px;font-weight:700;color:#fff;">1개월 선결제</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,200,100,0.04);border:1px solid rgba(201,168,76,0.15);border-radius:10px;padding:12px 14px;">
-            <span style="font-size:12px;color:rgba(255,255,255,0.5);">30-59일 상품</span>
-            <span style="font-size:13px;font-weight:700;color:#fff;">2개월 선결제</span>
-          </div>
-        </div>
-        <div style="margin-top:12px;font-size:11.5px;color:rgba(255,255,255,0.5);line-height:1.8;">
-          📌 선결제만 먼저 이루어지며, <strong>리워드 적립은 기존 날짜에 적립</strong>됩니다.<br>
-          💎 더 많은 리워드 적립을 원하시면 <strong style="color:#f472b6;">프리미엄 플랜</strong>을 이용해 주세요.
-        </div>
-      </div>
-    </div>
+    <!-- 뒤로가기 -->
+    <button type="button" class="back-btn" onclick="closeReward();">↑ 뒤로가기</button>
+  </div>
 
+  <!-- Footer -->
+  <div class="footer">
+    <p>문의사항이 있으시면<br>담당자에게 연락해 주세요.</p>
   </div>
 
 </div>
+
+<script>
+function openReward(){
+  var s=document.getElementById('reward-section');
+  var t=document.getElementById('reward-toggle');
+  s.style.display='block';
+  t.style.display='none';
+  setTimeout(function(){s.scrollIntoView({behavior:'smooth',block:'start'});},50);
+}
+function closeReward(){
+  var s=document.getElementById('reward-section');
+  var t=document.getElementById('reward-toggle');
+  document.getElementById('reward-timing').style.display='none';
+  document.getElementById('reward-prepay').style.display='none';
+  document.querySelectorAll('.accord-arrow').forEach(function(a){a.style.transform='rotate(0deg)';});
+  s.style.display='none';
+  t.style.display='block';
+  setTimeout(function(){t.scrollIntoView({behavior:'smooth',block:'center'});},50);
+}
+function toggleAccord(id,btn){
+  var el=document.getElementById(id);
+  var arrow=btn.querySelector('.accord-arrow');
+  if(el.style.display==='none'){el.style.display='block';arrow.style.transform='rotate(180deg)';}
+  else{el.style.display='none';arrow.style.transform='rotate(0deg)';}
+}
+</script>
+
+</body>
+</html>
